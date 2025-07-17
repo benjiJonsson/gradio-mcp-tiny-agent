@@ -3,6 +3,7 @@ import os
 
 from smolagents import InferenceClientModel, CodeAgent, MCPClient
 
+mcp_client = None
 
 try:
     mcp_client = MCPClient(
@@ -10,17 +11,18 @@ try:
     )
     tools = mcp_client.get_tools()
 
-    model = InferenceClientModel(token=os.getenv("HUGGINGFACE_API_TOKEN"))
+    model = InferenceClientModel(token=os.getenv("HF_TOKEN"))
     agent = CodeAgent(tools=[*tools], model=model, additional_authorized_imports=["json", "ast", "urllib", "base64"])
 
     demo = gr.ChatInterface(
         fn=lambda message, history: str(agent.run(message)),
         type="messages",
-        examples=["Analyze the sentiment of the following text 'This is awesome'"],
+        examples=["Analyze the sentiment of the following text 'This is awesome'", "Prime factorization of 68"],
         title="Agent with MCP Tools",
         description="This is a simple agent that uses MCP tools to answer questions.",
     )
 
     demo.launch()
 finally:
-    mcp_client.disconnect()
+    if mcp_client:
+        mcp_client.disconnect()

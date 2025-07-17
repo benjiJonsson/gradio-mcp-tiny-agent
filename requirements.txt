@@ -1,2 +1,4 @@
 gradio[mcp]
 smolagents[mcp]
+mcp
+fastmcp

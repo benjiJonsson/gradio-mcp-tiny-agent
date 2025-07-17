@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "mcp-remote": "^0.1.18",
+    "@huggingface/tiny-agents": "latest"
+  }
+}
