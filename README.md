@@ -11,7 +11,14 @@ pinned: false
 
 # MCP Client with Gradio and Tiny Agents
 
-This project implements both a Gradio MCP client and a tiny agent configuration following the tutorial sheets.
+This project demonstrates building Model Context Protocol (MCP) clients using Gradio and Tiny Agents. It shows how to create AI applications that can connect to multiple tool providers through a standardized interface.
+
+## What you can do
+
+- Use a web interface to interact with MCP tools
+- Run a command-line agent with JSON configuration
+- Create Python agents programmatically
+- Access tools like prime factorization and image processing
 
 ## Setup
 
@@ -32,62 +39,71 @@ export HF_TOKEN=your_token_here
 
 ## Usage
 
-### Gradio MCP Client
+### Web Interface (Gradio)
 
-Run the Gradio interface:
 ```bash
 python app.py
 ```
 
-This will start a web interface that connects to the MCP server and provides a chat interface.
+Opens a web interface at http://localhost:7860 where you can chat with the agent and use MCP tools.
 
-### Tiny Agent (JSON Configuration)
+### Command Line Agent
 
-Run the tiny agent via JSON configuration:
 ```bash
 cd my-agent
 tiny-agents run agent.json
 ```
 
-The agent is configured to connect to the MCP server via the `my-agent/agent.json` configuration file.
+Interactive command-line interface. Try asking:
+- "Prime factorization of 68"
+- "What are the prime factors of 42?"
 
-### Python Agent (huggingface_hub)
-
-You can also create a Python agent using the huggingface_hub library:
+### Python Agent
 
 ```python
 from huggingface_hub import Agent
+from huggingface_hub.inference._mcp.mcp_client import StdioServerConfig
 
 agent = Agent(
     model="Qwen/Qwen2.5-72B-Instruct",
     provider="nebius",
     servers=[
-        {
-            "command": "npx",
-            "args": [
+        StdioServerConfig(
+            command="npx",
+            args=[
                 "mcp-remote",
                 "https://abidlabs-mcp-tool-http.hf.space/gradio_api/mcp/sse"
             ]
-        }
+        )
     ],
 )
 ```
 
-Test the Python agent:
+Test with:
 ```bash
 python test_python_agent.py
 ```
 
+## Available Tools
+
+The MCP server provides:
+- Prime factorization
+- Image generation (cheetah images)
+- Image orientation detection
+- Sepia filter application
+
 ## Files
 
-- `app.py`: Gradio MCP client implementation
-- `my-agent/agent.json`: Tiny agent JSON configuration
-- `tiny_agent_python.py`: Python agent using huggingface_hub (local server)
-- `tiny_agent_deployed.py`: Python agent using huggingface_hub (deployed server)
-- `test_python_agent.py`: Test script for Python agent
-- `requirements.txt`: Python dependencies
-- `package.json`: Node.js dependencies
+- `app.py` - Gradio web interface
+- `my-agent/agent.json` - Tiny agent configuration
+- `tiny_agent_python.py` - Python agent for local server
+- `tiny_agent_deployed.py` - Python agent for deployed server
+- `test_python_agent.py` - Test script
+- `requirements.txt` - Python dependencies
+- `package.json` - Node.js dependencies
 
-## Environment Variables
+## Requirements
 
-- `HF_TOKEN`: Hugging Face API token for model access
+- Python 3.8+
+- Node.js and npm
+- Hugging Face API token (set as HF_TOKEN environment variable)
