@@ -7,7 +7,7 @@
             "command": "npx",
             "args": [
                 "mcp-remote",
-                "https://abidlabs-mcp-tool-http.hf.space/gradio_api/mcp/sse"
+                "http://localhost:7860/gradio_api/mcp/sse"
             ]
         }
     ]

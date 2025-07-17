@@ -2,3 +2,4 @@ gradio[mcp]
 smolagents[mcp]
 mcp
 fastmcp
+textblob
